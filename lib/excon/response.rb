@@ -69,6 +69,7 @@ module Excon
     def self.parse(socket, datum)
       # this will discard any trailing lines from the previous response if any.
       line = nil
+      datum[:timings][:response_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
       loop do
         line = socket.readline
         break if line[9,3].to_i != 0
@@ -187,6 +188,7 @@ module Excon
           end
         end
       end
+      datum[:timings][:response_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
       datum
     end
 

@@ -178,6 +178,7 @@ module Excon
     timeout: nil,
     uri_parser: URI,
     versions: VERSIONS,
-    write_timeout: 60
+    write_timeout: 60,
+    timings: {}
   }
 end
