@@ -142,9 +142,9 @@ module Excon
         resolver = Resolv.new([Resolv::Hosts.new, dns_resolver])
       end
 
-      @data[:timings][:dns_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+      @data[:timings][:dns_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       addresses = resolver.getaddresses(hostname)
-      @data[:timings][:dns_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+      @data[:timings][:dns_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       addresses.each do |ip|
         # already succeeded on previous addrinfo
@@ -155,7 +155,7 @@ module Excon
         @remote_ip = ip
         @data[:remote_ip] = ip
 
-        @data[:timings][:connect_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+        @data[:timings][:connect_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         # nonblocking connect
         begin
           sockaddr = ::Socket.sockaddr_in(port, ip)
@@ -188,7 +188,7 @@ module Excon
         rescue SystemCallError => exception
           socket&.close rescue nil
         end
-        @data[:timings][:connect_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+        @data[:timings][:connect_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       end
 
       exception ||= Resolv::ResolvError.new("no address for #{hostname}")

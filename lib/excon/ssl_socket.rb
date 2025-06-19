@@ -9,7 +9,7 @@ module Excon
       @port = data[:port] || 443
       super
 
-      @data[:timings][:ssl_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+      @data[:timings][:ssl_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       # create ssl context
       ssl_context = OpenSSL::SSL::SSLContext.new
@@ -168,7 +168,7 @@ module Excon
         @socket.post_connection_check(@data[:ssl_verify_peer_host] || @data[:host])
       end
 
-      @data[:timings][:ssl_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+      @data[:timings][:ssl_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     end
 
     private

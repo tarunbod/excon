@@ -112,7 +112,7 @@ module Excon
     end
 
     def request_call(datum)
-      datum[:timings][:total_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+      datum[:timings][:total_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       begin
         if datum.has_key?(:response)
           # we already have data from a middleware, so bail
@@ -152,7 +152,7 @@ module Excon
           # add additional "\r\n" to indicate end of headers
           request << CR_NL
 
-          datum[:timings][:transfer_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+          datum[:timings][:transfer_start] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
           if datum.has_key?(:request_block)
             socket(datum).write(request) # write out request + headers
             while true # write out body with chunked encoding
@@ -189,7 +189,7 @@ module Excon
               socket(datum).write(chunk)
             end
           end
-          datum[:timings][:transfer_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+          datum[:timings][:transfer_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         end
       rescue => error
         case error
@@ -310,7 +310,7 @@ module Excon
           reset
         end
 
-        datum[:timings][:total_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC, :microsecond)
+        datum[:timings][:total_end] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         datum[:response][:timings] = datum[:timings]
         Excon::Response.new(datum[:response])
       else
